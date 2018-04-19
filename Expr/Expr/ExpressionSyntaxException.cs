@@ -10,7 +10,11 @@ namespace Entap.Expr
 		/// <summary>
 		/// 数式の中の位置
 		/// </summary>
-		public int Offset { get => _offset; }
+		public int Offset {
+			get {
+				return _offset;
+			}
+		}
 
 		/// <summary>
 		/// <see cref="T:ExpressionSyntaxException"/> クラスのインスタンスを初期化する。

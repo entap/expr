@@ -53,25 +53,37 @@ namespace Entap.Expr
 		/// 値が真偽値か判定する。
 		/// </summary>
 		/// <returns>真偽値なら<c>true</c>、そうでないなら<c>false</c></returns>
-		public bool IsBool() => _value is bool;
+		public bool IsBool()
+		{
+			return _value is bool;
+		}
 
 		/// <summary>
 		/// 値が実数か判定する。
 		/// </summary>
 		/// <returns>値が実数なら<c>true</c>、そうでないなら<c>false</c></returns>
-		public bool IsNumber() => _value is double;
+		public bool IsNumber()
+		{
+			return _value is double;
+		}
 
 		/// <summary>
 		/// 値が文字列か判定する。
 		/// </summary>
 		/// <returns>値が文字列なら<c>true</c>、そうでないなら<c>false</c></returns>
-		public bool IsString() => _value is string;
+		public bool IsString()
+		{
+			return _value is string;
+		}
 
 		/// <summary>
 		/// 値が関数か判定する。
 		/// </summary>
 		/// <returns>値が関数なら<c>true</c>、そうでないなら<c>false</c></returns>
-		public bool IsFunc() => _value is Delegate;
+		public bool IsFunc()
+		{
+			return _value is Delegate;
+		}
 
 		/// <summary>
 		/// 値を真偽値として取得する。
@@ -133,7 +145,10 @@ namespace Entap.Expr
 		/// 文字列として取得する。
 		/// </summary>
 		/// <returns>結果</returns>
-		public string AsString() => _value == null ? "null" : _value.ToString();
+		public string AsString()
+		{
+			return _value == null ? "null" : _value.ToString();
+		}
 
 		/// <summary>
 		/// 指定された型に変換する。
@@ -167,13 +182,19 @@ namespace Entap.Expr
 		/// 値が0か判定する
 		/// </summary>
 		/// <returns>値が0なら<c>true</c>、そうでないなら<c>false</c></returns>
-		public bool IsZero() => _value is double && System.Math.Abs((double)_value) < double.Epsilon;
+		public bool IsZero()
+		{
+			return _value is double && System.Math.Abs((double)_value) < double.Epsilon;
+		}
 
 		/// <summary>
 		/// 値がNULLか判定する
 		/// </summary>
 		/// <returns>値がNullなら<c>true</c>、そうでないなら<c>false</c></returns>
-		public bool IsNull() => _value == null;
+		public bool IsNull()
+		{
+			return _value == null;
+		}
 
 		/// <summary>
 		/// ２つの値を比較する。
@@ -251,7 +272,10 @@ namespace Entap.Expr
 		/// <returns>演算結果</returns>
 		/// <param name="x">左の値</param>
 		/// <param name="y">右の値</param>
-		static Value Subtract(Value x, Value y) => new Value(x.AsNumber() - y.AsNumber());
+		static Value Subtract(Value x, Value y)
+		{
+			return new Value(x.AsNumber() - y.AsNumber());
+		}
 
 		/// <summary>
 		/// 乗算
@@ -259,7 +283,10 @@ namespace Entap.Expr
 		/// <returns>演算結果</returns>
 		/// <param name="x">左の値</param>
 		/// <param name="y">右の値</param>
-		static Value Multiply(Value x, Value y) => new Value(x.AsNumber() * y.AsNumber());
+		static Value Multiply(Value x, Value y)
+		{
+			return new Value(x.AsNumber() * y.AsNumber());
+		}
 
 		/// <summary>
 		/// 除算
@@ -267,7 +294,10 @@ namespace Entap.Expr
 		/// <returns>演算結果</returns>
 		/// <param name="x">左の値</param>
 		/// <param name="y">右の値</param>
-		static Value Divide(Value x, Value y) => new Value(x.AsNumber() / y.AsNumber());
+		static Value Divide(Value x, Value y)
+		{
+			return new Value(x.AsNumber() / y.AsNumber());
+		}
 
 		/// <summary>
 		/// 剰余
@@ -275,7 +305,10 @@ namespace Entap.Expr
 		/// <returns>演算結果</returns>
 		/// <param name="x">左の値</param>
 		/// <param name="y">右の値</param>
-		static Value Modulo(Value x, Value y) => new Value(x.AsNumber() % y.AsNumber());
+		static Value Modulo(Value x, Value y)
+		{
+			return new Value(x.AsNumber() % y.AsNumber());
+		}
 
 		/// <summary>
 		/// ビット演算のOR
@@ -283,7 +316,10 @@ namespace Entap.Expr
 		/// <returns>演算結果</returns>
 		/// <param name="x">左の値</param>
 		/// <param name="y">右の値</param>
-		static Value BitwiseOr(Value x, Value y) => new Value(x.AsInt() | y.AsInt());
+		static Value BitwiseOr(Value x, Value y)
+		{
+			return new Value(x.AsInt() | y.AsInt());
+		}
 
 		/// <summary>
 		/// ビット演算のXOR
@@ -291,7 +327,10 @@ namespace Entap.Expr
 		/// <returns>演算結果</returns>
 		/// <param name="x">左の値</param>
 		/// <param name="y">右の値</param>
-		static Value BitwiseXor(Value x, Value y) => new Value(x.AsInt() ^ y.AsInt());
+		static Value BitwiseXor(Value x, Value y)
+		{
+			return new Value(x.AsInt() ^ y.AsInt());
+		}
 
 		/// <summary>
 		/// ビット演算のAND
@@ -299,7 +338,10 @@ namespace Entap.Expr
 		/// <returns>演算結果</returns>
 		/// <param name="x">左の値</param>
 		/// <param name="y">右の値</param>
-		static Value BitwiseAnd(Value x, Value y) => new Value(x.AsInt() & y.AsInt());
+		static Value BitwiseAnd(Value x, Value y)
+		{
+			return new Value(x.AsInt() & y.AsInt());
+		}
 
 		/// <summary>
 		/// 左シフト
@@ -307,7 +349,10 @@ namespace Entap.Expr
 		/// <returns>演算結果</returns>
 		/// <param name="x">左の値</param>
 		/// <param name="y">右の値</param>
-		static Value LeftShift(Value x, Value y) => new Value(x.AsInt() << y.AsInt());
+		static Value LeftShift(Value x, Value y)
+		{
+			return new Value(x.AsInt() << y.AsInt());
+		}
 
 		/// <summary>
 		/// 右シフト
@@ -315,7 +360,10 @@ namespace Entap.Expr
 		/// <returns>演算結果</returns>
 		/// <param name="x">左の値</param>
 		/// <param name="y">右の値</param>
-		static Value RightShift(Value x, Value y) => new Value(x.AsInt() >> y.AsInt());
+		static Value RightShift(Value x, Value y)
+		{
+			return new Value(x.AsInt() >> y.AsInt());
+		}
 
 		/// <summary>
 		/// 論理AND
@@ -323,7 +371,10 @@ namespace Entap.Expr
 		/// <returns>演算結果</returns>
 		/// <param name="x">左の値</param>
 		/// <param name="y">右の値</param>
-		static Value LogicalAnd(Value x, Value y) => new Value(x.AsBool() ? y._value : x._value);
+		static Value LogicalAnd(Value x, Value y)
+		{
+			return new Value(x.AsBool() ? y._value : x._value);
+		}
 
 		/// <summary>
 		/// 論理OR
@@ -331,7 +382,10 @@ namespace Entap.Expr
 		/// <returns>演算結果</returns>
 		/// <param name="x">左の値</param>
 		/// <param name="y">右の値</param>
-		static Value LogicalOr(Value x, Value y) => new Value(x.AsBool() ? x._value : y._value);
+		static Value LogicalOr(Value x, Value y)
+		{
+			return new Value(x.AsBool() ? x._value : y._value);
+		}
 
 		/// <summary>
 		/// 等価
@@ -375,7 +429,10 @@ namespace Entap.Expr
 		/// <returns>演算結果</returns>
 		/// <param name="x">左の値</param>
 		/// <param name="y">右の値</param>
-		static Value NotEqual(Value x, Value y) => new Value(!Equal(x, y).AsBool());
+		static Value NotEqual(Value x, Value y)
+		{
+			return new Value(!Equal(x, y).AsBool());
+		}
 
 		/// <summary>
 		/// 小さい
@@ -383,7 +440,10 @@ namespace Entap.Expr
 		/// <returns>演算結果</returns>
 		/// <param name="x">左の値</param>
 		/// <param name="y">右の値</param>
-		static Value LessThan(Value x, Value y) => new Value(Compare(x, y) < 0);
+		static Value LessThan(Value x, Value y)
+		{
+			return new Value(Compare(x, y) < 0);
+		}
 
 		/// <summary>
 		/// 大きい
@@ -391,7 +451,10 @@ namespace Entap.Expr
 		/// <returns>演算結果</returns>
 		/// <param name="x">左の値</param>
 		/// <param name="y">右の値</param>
-		static Value GreaterThan(Value x, Value y) => new Value(Compare(x, y) > 0);
+		static Value GreaterThan(Value x, Value y)
+		{
+			return new Value(Compare(x, y) > 0);
+		}
 
 		/// <summary>
 		/// 小さい
@@ -399,7 +462,10 @@ namespace Entap.Expr
 		/// <returns>演算結果</returns>
 		/// <param name="x">左の値</param>
 		/// <param name="y">右の値</param>
-		static Value LessThanOrEqual(Value x, Value y) => new Value(Compare(x, y) <= 0);
+		static Value LessThanOrEqual(Value x, Value y)
+		{
+			return new Value(Compare(x, y) <= 0);
+		}
 
 		/// <summary>
 		/// 大きい
@@ -407,7 +473,10 @@ namespace Entap.Expr
 		/// <returns>演算結果</returns>
 		/// <param name="x">左の値</param>
 		/// <param name="y">右の値</param>
-		static Value GreaterThanOrEqual(Value x, Value y) => new Value(Compare(x, y) >= 0);
+		static Value GreaterThanOrEqual(Value x, Value y)
+		{
+			return new Value(Compare(x, y) >= 0);
+		}
 
 		/// <summary>
 		/// 累乗
@@ -415,7 +484,10 @@ namespace Entap.Expr
 		/// <returns>演算結果</returns>
 		/// <param name="x">左の値</param>
 		/// <param name="y">右の値</param>
-		static Value Power(Value x, Value y) => new Value(System.Math.Pow(x.AsNumber(), y.AsNumber()));
+		static Value Power(Value x, Value y)
+		{
+			return new Value(System.Math.Pow(x.AsNumber(), y.AsNumber()));
+		}
 
 		/// <summary>
 		/// 単項演算子の関数
@@ -448,27 +520,39 @@ namespace Entap.Expr
 		/// </summary>
 		/// <returns>演算結果</returns>
 		/// <param name="x">対象の値</param>
-		static Value UnaryPlus(Value x) => new Value(x.AsNumber());
+		static Value UnaryPlus(Value x)
+		{
+			return new Value(x.AsNumber());
+		}
 
 		/// <summary>
 		/// 単項マイナス
 		/// </summary>
 		/// <returns>演算結果</returns>
 		/// <param name="x">対象の値</param>
-		static Value Negate(Value x) => new Value(-x.AsNumber());
+		static Value Negate(Value x)
+		{
+			return new Value(-x.AsNumber());
+		}
 
 		/// <summary>
 		/// ビット演算のNOT
 		/// </summary>
 		/// <returns>演算結果</returns>
 		/// <param name="x">対象の値</param>
-		static Value BitwiseNot(Value x) => new Value(~x.AsInt());
+		static Value BitwiseNot(Value x)
+		{
+			return new Value(~x.AsInt());
+		}
 
 		/// <summary>
 		/// 論理NOT
 		/// </summary>
 		/// <returns>演算結果</returns>
 		/// <param name="x">対象の値</param>
-		static Value LogicalNot(Value x) => new Value(!x.AsBool());
+		static Value LogicalNot(Value x)
+		{
+			return new Value(!x.AsBool());
+		}
 	}
 }

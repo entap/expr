@@ -90,67 +90,100 @@ namespace Entap.Expr
 		/// 論理ORに関する構文解析
 		/// </summary>
 		/// <returns>構文木</returns>
-		IExpression ParseLogicalOr() => ParseBinary(ParseLogicalAnd, "||");
+		IExpression ParseLogicalOr()
+		{
+			return ParseBinary(ParseLogicalAnd, "||");
+		}
 
 		/// <summary>
 		/// 論理ANDに関する構文解析
 		/// </summary>
 		/// <returns>構文木</returns>
-		IExpression ParseLogicalAnd() => ParseBinary(ParseBitwiseOr, "&&");
+		IExpression ParseLogicalAnd()
+		{
+			return ParseBinary(ParseBitwiseOr, "&&");
+		}
 
 		/// <summary>
 		/// ビットごとのORに関する構文解析
 		/// </summary>
 		/// <returns>構文木</returns>
-		IExpression ParseBitwiseOr() => ParseBinary(ParseBitwiseXor, "|");
+		IExpression ParseBitwiseOr()
+		{
+			return ParseBinary(ParseBitwiseXor, "|");
+		}
 
 		/// <summary>
 		/// ビットごとのXORに関する構文解析
 		/// </summary>
 		/// <returns>構文木</returns>
-		IExpression ParseBitwiseXor() => ParseBinary(ParseBitwiseAnd, "^");
+		IExpression ParseBitwiseXor()
+		{
+			return ParseBinary(ParseBitwiseAnd, "^");
+		}
 
 		/// <summary>
 		/// ビットごとのANdに関する構文解析
 		/// </summary>
 		/// <returns>構文木</returns>
-		IExpression ParseBitwiseAnd() => ParseBinary(ParseEquality, "&");
+		IExpression ParseBitwiseAnd()
+		{
+			return ParseBinary(ParseEquality, "&");
+		}
 
 		/// <summary>
 		/// 等価比較に関する構文解析
 		/// </summary>
 		/// <returns>構文木</returns>
-		IExpression ParseEquality() => ParseBinary(ParseRelational, "==", "!=");
+		IExpression ParseEquality()
+		{
+			return ParseBinary(ParseRelational, "==", "!=");
+		}
 
 		/// <summary>
 		/// 大小比較に関する構文解析
 		/// </summary>
 		/// <returns>構文木</returns>
-		IExpression ParseRelational() => ParseBinary(ParseShift, "<", ">", "<=", ">=");
+		IExpression ParseRelational()
+		{
+			return ParseBinary(ParseShift, "<", ">", "<=", ">=");
+		}
 
 		/// <summary>
 		/// ビットシフトに関する構文解析
 		/// </summary>
 		/// <returns>構文木</returns>
-		IExpression ParseShift() => ParseBinary(ParseTerm, "<<", ">>");
+		IExpression ParseShift()
+		{
+			return ParseBinary(ParseTerm, "<<", ">>");
+		}
 
 		/// <summary>
 		/// 加算・減算に関する構文解析
 		/// </summary>
 		/// <returns>構文木</returns>
-		IExpression ParseTerm() => ParseBinary(ParseFactor, "+", "-");
+		IExpression ParseTerm()
+		{
+			return ParseBinary(ParseFactor, "+", "-");
+		}
 
 		/// <summary>
 		/// 乗算・除算・剰余に関する構文解析
 		/// </summary>
 		/// <returns>構文木</returns>
-		IExpression ParseFactor() => ParseBinary(ParseExponential, "*", "/", "%");
+		IExpression ParseFactor()
+		{
+			return ParseBinary(ParseExponential, "*", "/", "%");
+		}
 
 		/// <summary>
 		/// 累乗に関する構文解析
 		/// </summary>
 		/// <returns>構文木</returns>
-		IExpression ParseExponential() => ParseBinary(ParseUnary, "**");
+		IExpression ParseExponential()
+		{
+			return ParseBinary(ParseUnary, "**");
+		}
 
 		/// <summary>
 		/// 単項演算子に関する構文解析

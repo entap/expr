@@ -75,7 +75,10 @@ namespace Entap.Expr
 		/// <returns>斜辺の長さ</returns>
 		/// <param name="x">x座標</param>
 		/// <param name="y">y座標</param>
-		static double Hypot(double x, double y) => System.Math.Sqrt(x * x + y * y);
+		static double Hypot(double x, double y)
+		{
+			return System.Math.Sqrt(x * x + y * y);
+		}
 
 		/// <summary>
 		/// 値を範囲内に収める。
@@ -84,7 +87,10 @@ namespace Entap.Expr
 		/// <param name="x">値</param>
 		/// <param name="a">最小値</param>
 		/// <param name="b">最大値</param>
-		static double Constrain(double x, double a, double b) => x < a ? a : (x > b ? b : x);
+		static double Constrain(double x, double a, double b)
+		{
+			return x < a ? a : (x > b ? b : x);
+		}
 
 		/// <summary>
 		/// 値を範囲内に収める。
@@ -93,7 +99,10 @@ namespace Entap.Expr
 		/// <param name="a">範囲の下限値</param>
 		/// <param name="b">範囲の上限値</param>
 		/// <param name="x">値</param>
-		static double Lerp(double a, double b, double x) => a * (1 - x) + b * x;
+		static double Lerp(double a, double b, double x)
+		{
+			return a * (1 - x) + b * x;
+		}
 
 		/// <summary>
 		/// ある範囲の値を正規化する。
@@ -102,7 +111,10 @@ namespace Entap.Expr
 		/// <param name="x">値</param>
 		/// <param name="a">範囲の下限値</param>
 		/// <param name="b">範囲の上限値</param>
-		static double Norm(double x, double a, double b) => Map(x, a, b, 0, 1);
+		static double Norm(double x, double a, double b)
+		{
+			return Map(x, a, b, 0, 1);
+		}
 
 		/// <summary>
 		/// ある範囲の値を別の範囲に写像する。
