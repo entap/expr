@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Entap.Expr
 {
@@ -47,7 +48,7 @@ namespace Entap.Expr
 		/// <returns>評価結果</returns>
 		/// <param name="expr">数式</param>
 		/// <param name="vars">変数の辞書</param>
-		public static object Eval(string expr, Dictionary<string, object> vars = null)
+		public static ExprValue Eval(string expr, Dictionary<string, object> vars = null)
 		{
 			return (new Expr(expr)).Eval(vars);
 		}
@@ -57,7 +58,7 @@ namespace Entap.Expr
 		/// </summary>
 		/// <returns>評価結果</returns>
 		/// <param name="vars">変数の辞書</param>
-		public object Eval(Dictionary<string, object> vars = null)
+		public ExprValue Eval(Dictionary<string, object> vars = null)
 		{
 			return Eval(name => vars != null ? vars[name] : ExprValue.Null);
 		}
@@ -67,10 +68,10 @@ namespace Entap.Expr
 		/// </summary>
 		/// <returns>評価結果</returns>
 		/// <param name="binding">変数のバインディング</param>
-		public object Eval(BindingDelegate binding)
+		public ExprValue Eval(BindingDelegate binding)
 		{
 			binding = Math.Binding(binding);
-			return _expr.Eval(binding).As(typeof(object));
+			return _expr.Eval(binding);
 		}
 	}
 }
