@@ -16,7 +16,7 @@ namespace Entap.Expr
 			{ "Infinity", double.PositiveInfinity },
 			{ "NaN", double.NaN },
 			// 数学定数
-			{ "E", System.Math.PI },
+			{ "E", System.Math.E },
 			{ "LN10", System.Math.Log(10) },
 			{ "LN2", System.Math.Log(2) },
 			{ "LOG10E", System.Math.Log(System.Math.E, 10) },
