@@ -14,11 +14,15 @@
 
     var vars = new Dictionary<string, object>();
     vars["x"]= 123;
-    Expr.Expression.Evaluate<double>("1+x", vars);
+    Expr.Expression.Evaluate<double>("1+x", vars);
 
 関数を使う。
 
     Expr.Expression.Evaluate<double>("sin(3)");
+
+## 型
+
+bool型、double型、string型に対応しています。
 
 ## 演算子
 
