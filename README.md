@@ -50,4 +50,54 @@
 |論理 AND|左から右|…&&…|
 |論理 OR|左から右|…｜｜…|
 
+## 定数
+true
+false
+Epsilon 実数型の最も細かい値
+Infinity 無限
+NaN
+E 自然対数
+LN10
+LN2
+LOG10E
+LOG2E
+PI
+SQRT1_2
+SQRT2
+Rad2Deg
+Deg2Rad
+
 ## 標準関数
+
+abs
+acos
+asin
+atan
+atan2
+ceil
+cbrt
+cos
+cosh
+exp
+floor
+hypot
+log
+log10
+log2
+max
+min
+pow
+round
+sign
+sinn
+sinh
+sqrt
+tan
+tanh
+sq
+constrain
+mag
+dist
+lerp
+norm
+map
