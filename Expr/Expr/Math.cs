@@ -66,7 +66,7 @@ namespace Entap.Expr
 			{ "dist", new Func<double, double, double, double, double>((x1, y1, x2, y2) => Hypot(x1-x2, y1-y2)) },
 			{ "lerp", new Func<double, double, double, double>(Lerp) },
 			{ "norm", new Func<double, double, double, double>(Norm) },
-			{ "map", new Func<double, double, double, double, double, double>(Map) }
+//			{ "map", new Func<double, double, double, double, double, double>(Map) }
 		};
 
 		/// <summary>

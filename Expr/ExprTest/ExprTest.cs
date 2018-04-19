@@ -212,14 +212,14 @@ namespace Entap.Expr.Test
 		[Fact]
 		public void ExprTest9()
 		{
-			Assert.Equal((bool)(0.0 == 0.0), Expression.Evaluate<bool>("0 == 0"));
-			Assert.Equal((bool)(0.0 == 1.0), Expression.Evaluate<bool>("0 == 1"));
-			Assert.Equal((bool)(0.0 != 0.0), Expression.Evaluate<bool>("0 != 0"));
-			Assert.Equal((bool)(0.0 != 1.0), Expression.Evaluate<bool>("0 != 1"));
-			Assert.Equal((bool)(123.0 < 321.0), Expression.Evaluate<bool>("123<321"));
-			Assert.Equal((bool)(123.0 <= 321.0), Expression.Evaluate<bool>("123<=321"));
-			Assert.Equal((bool)(123.0 > 321.0), Expression.Evaluate<bool>("123>321"));
-			Assert.Equal((bool)(123.0 >= 321.0), Expression.Evaluate<bool>("123>=321"));
+			Assert.Equal(false, Expression.Evaluate<bool>("0 == 0"));
+			Assert.Equal(true, Expression.Evaluate<bool>("0 == 1"));
+			Assert.Equal(false, Expression.Evaluate<bool>("0 != 0"));
+			Assert.Equal(false, Expression.Evaluate<bool>("0 != 1"));
+			Assert.Equal(true, Expression.Evaluate<bool>("123<321"));
+			Assert.Equal(true, Expression.Evaluate<bool>("123<=321"));
+			Assert.Equal(false, Expression.Evaluate<bool>("123>321"));
+			Assert.Equal(false, Expression.Evaluate<bool>("123>=321"));
 		}
 
 		[Fact]

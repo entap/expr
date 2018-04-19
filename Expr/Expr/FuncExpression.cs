@@ -28,7 +28,7 @@ namespace Entap.Expr
 		public Value Evaluate(BindingDelegate binding)
 		{
 			var func = binding(_func) as Delegate;
-			var p = func.GetMethodInfo().GetParameters();
+			var p = func.Method.GetParameters();
 			if (_args.Count < p.Length) {
 				throw new ArgumentException("Wrong number of arguments: " + _func);
 			}
