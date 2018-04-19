@@ -59,7 +59,7 @@ namespace Entap.Expr
 			var node = ParseLogicalOr();
 			var token = PeekToken();
 			if (!token.IsTerminal()) {
-				throw new ExprException("Unexpected token: " + token.Text, token.Offset);
+				throw new ExprSyntaxException("Unexpected token: " + token.Text, token.Offset);
 			}
 			return node;
 		}
@@ -180,7 +180,7 @@ namespace Entap.Expr
 					NextToken();
 					return node;
 				}
-				throw new ExprException("Unclosed bracket", token.Offset);
+				throw new ExprSyntaxException("Unclosed bracket", token.Offset);
 			}
 			return ParsePrimary();
 		}
@@ -204,7 +204,7 @@ namespace Entap.Expr
 					return new VarExpr((string)token.Value);
 				}
 			}
-			throw new ExprException("Invalid token: " + token.Text, token.Offset);
+			throw new ExprSyntaxException("Invalid token: " + token.Text, token.Offset);
 		}
 
 		/// <summary>
@@ -223,9 +223,9 @@ namespace Entap.Expr
 					} else if (token.IsOperator(")")) {
 						break;
 					} else if (token.IsTerminal()) {
-						throw new ExprException("Unclosed bracket", PeekToken().Offset);
+						throw new ExprSyntaxException("Unclosed bracket", PeekToken().Offset);
 					} else {
-						throw new ExprException("Invalid token: " + PeekToken().Text, PeekToken().Offset);
+						throw new ExprSyntaxException("Invalid token: " + PeekToken().Text, PeekToken().Offset);
 					}
 				}
 			}

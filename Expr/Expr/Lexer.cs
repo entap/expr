@@ -112,7 +112,7 @@ namespace Entap.Expr
 				token.Type = TokenType.Punctuator;
 				token.Value = ReadPunctuator();
 				if (token.Value == null) {
-					throw new ExprException("Unknown char: " + (char)c, _offset);
+					throw new ExprSyntaxException("Unknown char: " + (char)c, _offset);
 				}
 			}
 			token.Text = _expr.Substring(token.Offset, _offset - token.Offset);
@@ -195,7 +195,7 @@ namespace Entap.Expr
 				NextChar(2);
 				var hex = ReadWhile(IsHexDigit);
 				if (hex.Length == 0) {
-					throw new ExprException("Invalid number format", _offset);
+					throw new ExprSyntaxException("Invalid number format", _offset);
 				}
 				return Convert.ToDouble(Convert.ToInt64(hex, 16));
 			}
@@ -212,7 +212,7 @@ namespace Entap.Expr
 				NextChar();
 				var dec = ReadWhile(IsDecDigit);
 				if (dec.Length == 0) {
-					throw new ExprException("Invalid number format", _offset);
+					throw new ExprSyntaxException("Invalid number format", _offset);
 				}
 				s.Append(dec);
 				c1 = PeekChar();
@@ -230,7 +230,7 @@ namespace Entap.Expr
 				}
 				var exp = ReadWhile(IsDecDigit);
 				if (exp.Length == 0) {
-					throw new ExprException("Invalid number format", _offset);
+					throw new ExprSyntaxException("Invalid number format", _offset);
 				}
 				s.Append(exp);
 			}
@@ -250,7 +250,7 @@ namespace Entap.Expr
 			while (true) {
 				var c = PeekChar();
 				if (c == -1) {
-					throw new ExprException("Unclosed quote", _offset);
+					throw new ExprSyntaxException("Unclosed quote", _offset);
 				}
 				NextChar();
 				if (c == quote) {
