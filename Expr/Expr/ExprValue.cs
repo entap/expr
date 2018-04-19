@@ -1,0 +1,485 @@
+﻿using System;
+using System.Collections.Generic;
+
+namespace Entap.Expr
+{
+	public class ExprValue
+	{
+		object _value;
+
+		/// <summary>
+		/// NULLを表す定数値
+		/// </summary>
+		public static ExprValue Null = new ExprValue(null);
+
+		/// <summary>
+		/// Trueを表す定数値
+		/// </summary>
+		public static ExprValue True = new ExprValue(true);
+
+		/// <summary>
+		/// Falseを表す定数値
+		/// </summary>
+		public static ExprValue False = new ExprValue(false);
+
+		/// <summary>
+		/// <see cref="T:Entap.Expr.Value"/> クラスのインスタンスを初期化する。
+		/// </summary>
+		/// <param name="value">Value.</param>
+		public ExprValue(object value = null)
+		{
+			Set(value);
+		}
+
+		/// <summary>
+		/// 値を設定する。
+		/// </summary>
+		/// <param name="value">設定する値</param>
+		public void Set(object value)
+		{
+			if (value is ExprValue) {
+				_value = ((ExprValue)value)._value;
+			} else if (value == null || value is bool || value is double || value is string) {
+				_value = value; // 対応している型
+			} else if (value is sbyte || value is byte || value is short || value is ushort || value is int ||
+					   value is uint || value is long || value is ulong || value is float || value is decimal) {
+				_value = Convert.ToDouble(value); // 整数・実数型なら、double型に変換
+			} else {
+				_value = value.ToString(); // 不明な型はToStringする。
+			}
+		}
+
+		/// <summary>
+		/// 値が真偽値か判定する。
+		/// </summary>
+		/// <returns>真偽値なら<c>true</c>、そうでないなら<c>false</c>
+		public bool IsBool() => _value is bool;
+
+		/// <summary>
+		/// 値が実数か判定する。
+		/// </summary>
+		/// <returns>値が実数なら<c>true</c>、そうでないなら<c>false</c>
+		public bool IsNumber() => _value is double;
+
+		/// <summary>
+		/// 値が文字列か判定する。
+		/// </summary>
+		/// <returns>値が文字列なら<c>true</c>、そうでないなら<c>false</c>
+		public bool IsString() => _value is string;
+
+		/// <summary>
+		/// 値が関数か判定する。
+		/// </summary>
+		/// <returns>値が関数なら<c>true</c>、そうでないなら<c>false</c>
+		public bool IsFunc() => _value is Delegate;
+
+		/// <summary>
+		/// 値を真偽値として取得する。
+		/// </summary>
+		/// <returns>真偽値</returns>
+		public bool AsBool()
+		{
+			if (_value == null) {
+				return false;
+			}
+			if (_value is bool) {
+				return (bool)_value;
+			}
+			if (_value is double) {
+				return !(double.IsNaN((double)_value) || IsZero());
+			}
+			if (_value is string) {
+				return ((string)_value).Length >= 1;
+			}
+			throw new NotImplementedException();
+		}
+
+		/// <summary>
+		/// 実数として取得する。
+		/// </summary>
+		/// <returns>結果</returns>
+		public double AsNumber()
+		{
+			if (_value == null) {
+				return 0;
+			}
+			if (_value is bool) {
+				return (bool)_value ? 1 : 0;
+			}
+			if (_value is double) {
+				return (double)_value;
+			}
+			if (_value is string) {
+				double d;
+				return double.TryParse((string)_value, out d) ? d : double.NaN;
+			}
+			throw new NotImplementedException();
+		}
+
+		/// <summary>
+		/// 整数として取得する。
+		/// </summary>
+		/// <returns>結果</returns>
+		public int AsInt()
+		{
+			var n = AsNumber();
+			if (double.IsNaN(n) || double.IsInfinity(n) || IsZero()) {
+				return 0;
+			}
+			return Convert.ToInt32(n);
+		}
+
+		/// <summary>
+		/// 関数として取得する。
+		/// </summary>
+		/// <returns>結果</returns>
+		public Delegate AsFunc()
+		{
+			if (_value is Delegate) {
+				return (Delegate)_value;
+			} else {
+				return new Func<ExprValue>(() => this);
+			}
+		}
+
+		/// <summary>
+		/// 文字列として取得する。
+		/// </summary>
+		/// <returns>結果</returns>
+		public string AsString() => _value == null ? "null" : _value.ToString();
+
+		/// <summary>
+		/// 指定された型に変換する。
+		/// </summary>
+		/// <returns>変換結果</returns>
+		/// <param name="type">型</param>
+		public object As(Type type)
+		{
+			if (type == typeof(int)) {
+				return AsInt();
+			} else if (type == typeof(double)) {
+				return AsNumber();
+			} else if (type == typeof(bool)) {
+				return AsBool();
+			} else if (type == typeof(string)) {
+				return AsString();
+			} else if (type == typeof(object)) {
+				return _value;
+			} else if (type == typeof(ExprValue)) {
+				return this;
+			} else {
+				throw new InvalidCastException();
+			}
+		}
+
+		/// <summary>
+		/// 値が0か判定する
+		/// </summary>
+		/// <returns>値が0なら<c>true</c>、そうでないなら<c>false</c></returns>
+		public bool IsZero() => _value is double && System.Math.Abs((double)_value) < double.Epsilon;
+
+		/// <summary>
+		/// 値がNULLか判定する
+		/// </summary>
+		/// <returns>値がNullなら<c>true</c>、そうでないなら<c>false</c></returns>
+		public bool IsNull() => _value == null;
+
+		/// <summary>
+		/// ２つの値を比較する。
+		/// </summary>
+		/// <returns>xがyより小さいなら<c>-1</c>、xがyより大きいなら<c>1</c>、等価なら<c>0</c></returns>
+		/// <param name="x">x</param>
+		/// <param name="y">y</param>
+		static public int Compare(ExprValue x, ExprValue y)
+		{
+			if (x.IsString() && y.IsString()) {
+				return System.Math.Sign(string.Compare((string)x._value, (string)y._value));
+			} else {
+				return System.Math.Sign(x.AsNumber() - y.AsNumber());
+			}
+		}
+
+		/// <summary>
+		/// 二項演算子の関数
+		/// </summary>
+		delegate ExprValue BinaryOperator(ExprValue x, ExprValue y);
+
+		/// <summary>
+		/// 二項演算子の辞書
+		/// </summary>
+		static Dictionary<string, BinaryOperator> BinaryOperators = new Dictionary<string, BinaryOperator> {
+			{ "||", LogicalOr },
+			{ "&&", LogicalAnd },
+			{ "|", BitwiseOr },
+			{ "^", BitwiseXor },
+			{ "&", BitwiseAnd },
+			{ "==", Equal },
+			{ "!=", NotEqual },
+			{ "<", LessThan },
+			{ ">", GreaterThan },
+			{ "<=", LessThanOrEqual },
+			{ ">=", GreaterThanOrEqual },
+			{ "<<", LeftShift },
+			{ ">>", RightShift },
+			{ "**", Power },
+			{ "+", Add },
+			{ "-", Subtract },
+			{ "*", Multiply },
+			{ "/", Divide },
+			{ "%", Modulo }
+		};
+
+		/// <summary>
+		/// 二項演算子の演算を行う。
+		/// </summary>
+		/// <returns>演算結果</returns>
+		/// <param name="x">演算子の左の値</param>
+		/// <param name="y">演算子の右の値</param>
+		/// <param name="op">演算子の文字列</param>
+		public static ExprValue EvalBinaryOperator(ExprValue x, ExprValue y, string op)
+		{
+			return BinaryOperators[op](x, y);
+		}
+
+		/// <summary>
+		/// 加算
+		/// </summary>
+		/// <returns>演算結果</returns>
+		/// <param name="x">左の値</param>
+		/// <param name="y">右の値</param>
+		static ExprValue Add(ExprValue x, ExprValue y)
+		{
+			if (x.IsString() || y.IsString()) {
+				return new ExprValue(x.AsString() + y.AsString());
+			} else {
+				return new ExprValue(x.AsNumber() + y.AsNumber());
+			}
+		}
+
+		/// <summary>
+		/// 減算
+		/// </summary>
+		/// <returns>演算結果</returns>
+		/// <param name="x">左の値</param>
+		/// <param name="y">右の値</param>
+		static ExprValue Subtract(ExprValue x, ExprValue y) => new ExprValue(x.AsNumber() - y.AsNumber());
+
+		/// <summary>
+		/// 乗算
+		/// </summary>
+		/// <returns>演算結果</returns>
+		/// <param name="x">左の値</param>
+		/// <param name="y">右の値</param>
+		static ExprValue Multiply(ExprValue x, ExprValue y) => new ExprValue(x.AsNumber() * y.AsNumber());
+
+		/// <summary>
+		/// 除算
+		/// </summary>
+		/// <returns>演算結果</returns>
+		/// <param name="x">左の値</param>
+		/// <param name="y">右の値</param>
+		static ExprValue Divide(ExprValue x, ExprValue y) => new ExprValue(x.AsNumber() / y.AsNumber());
+
+		/// <summary>
+		/// 剰余
+		/// </summary>
+		/// <returns>演算結果</returns>
+		/// <param name="x">左の値</param>
+		/// <param name="y">右の値</param>
+		static ExprValue Modulo(ExprValue x, ExprValue y) => new ExprValue(x.AsNumber() % y.AsNumber());
+
+		/// <summary>
+		/// ビット演算のOR
+		/// </summary>
+		/// <returns>演算結果</returns>
+		/// <param name="x">左の値</param>
+		/// <param name="y">右の値</param>
+		static ExprValue BitwiseOr(ExprValue x, ExprValue y) => new ExprValue(x.AsInt() | y.AsInt());
+
+		/// <summary>
+		/// ビット演算のXOR
+		/// </summary>
+		/// <returns>演算結果</returns>
+		/// <param name="x">左の値</param>
+		/// <param name="y">右の値</param>
+		static ExprValue BitwiseXor(ExprValue x, ExprValue y) => new ExprValue(x.AsInt() ^ y.AsInt());
+
+		/// <summary>
+		/// ビット演算のAND
+		/// </summary>
+		/// <returns>演算結果</returns>
+		/// <param name="x">左の値</param>
+		/// <param name="y">右の値</param>
+		static ExprValue BitwiseAnd(ExprValue x, ExprValue y) => new ExprValue(x.AsInt() & y.AsInt());
+
+		/// <summary>
+		/// 左シフト
+		/// </summary>
+		/// <returns>演算結果</returns>
+		/// <param name="x">左の値</param>
+		/// <param name="y">右の値</param>
+		static ExprValue LeftShift(ExprValue x, ExprValue y) => new ExprValue(x.AsInt() << y.AsInt());
+
+		/// <summary>
+		/// 右シフト
+		/// </summary>
+		/// <returns>演算結果</returns>
+		/// <param name="x">左の値</param>
+		/// <param name="y">右の値</param>
+		static ExprValue RightShift(ExprValue x, ExprValue y) => new ExprValue(x.AsInt() >> y.AsInt());
+
+		/// <summary>
+		/// 論理AND
+		/// </summary>
+		/// <returns>演算結果</returns>
+		/// <param name="x">左の値</param>
+		/// <param name="y">右の値</param>
+		static ExprValue LogicalAnd(ExprValue x, ExprValue y) => new ExprValue(x.AsBool() ? y._value : x._value);
+
+		/// <summary>
+		/// 論理OR
+		/// </summary>
+		/// <returns>演算結果</returns>
+		/// <param name="x">左の値</param>
+		/// <param name="y">右の値</param>
+		static ExprValue LogicalOr(ExprValue x, ExprValue y) => new ExprValue(x.AsBool() ? x._value : y._value);
+
+		/// <summary>
+		/// 等価
+		/// </summary>
+		/// <returns>演算結果</returns>
+		/// <param name="x">左の値</param>
+		/// <param name="y">右の値</param>
+		static ExprValue Equal(ExprValue x, ExprValue y)
+		{
+			// 型が同じ場合
+			if (x.IsNull() || y.IsNull()) {
+				return new ExprValue(true);
+			}
+			if (x.IsBool() && y.IsBool()) {
+				return new ExprValue((bool)x._value == (bool)y._value);
+			}
+			if (x.IsNumber() && y.IsNumber()) {
+				return new ExprValue((double)x._value == (double)y._value);
+			}
+			if (x.IsString() && y.IsString()) {
+				return new ExprValue((string)x._value == (string)y._value);
+			}
+
+			// 文字列と数値の組み合わせの場合、数字に変換して比較する。
+			if ((x.IsString() || y.IsString()) && (x.IsNumber() || y.IsNumber())) {
+				return new ExprValue(x.AsNumber() == y.AsNumber());
+			}
+
+			// 真偽値とその他の組み合わせの場合、数字に変換して比較する。
+			if (x.IsBool() || y.IsBool()) {
+				return new ExprValue(x.AsNumber() == y.AsNumber());
+			}
+
+			// その他はfalse
+			return new ExprValue(false);
+		}
+
+		/// <summary>
+		/// 等価でない
+		/// </summary>
+		/// <returns>演算結果</returns>
+		/// <param name="x">左の値</param>
+		/// <param name="y">右の値</param>
+		static ExprValue NotEqual(ExprValue x, ExprValue y) => new ExprValue(!Equal(x, y).AsBool());
+
+		/// <summary>
+		/// 小さい
+		/// </summary>
+		/// <returns>演算結果</returns>
+		/// <param name="x">左の値</param>
+		/// <param name="y">右の値</param>
+		static ExprValue LessThan(ExprValue x, ExprValue y) => new ExprValue(Compare(x, y) < 0);
+
+		/// <summary>
+		/// 大きい
+		/// </summary>
+		/// <returns>演算結果</returns>
+		/// <param name="x">左の値</param>
+		/// <param name="y">右の値</param>
+		static ExprValue GreaterThan(ExprValue x, ExprValue y) => new ExprValue(Compare(x, y) > 0);
+
+		/// <summary>
+		/// 小さい
+		/// </summary>
+		/// <returns>演算結果</returns>
+		/// <param name="x">左の値</param>
+		/// <param name="y">右の値</param>
+		static ExprValue LessThanOrEqual(ExprValue x, ExprValue y) => new ExprValue(Compare(x, y) <= 0);
+
+		/// <summary>
+		/// 大きい
+		/// </summary>
+		/// <returns>演算結果</returns>
+		/// <param name="x">左の値</param>
+		/// <param name="y">右の値</param>
+		static ExprValue GreaterThanOrEqual(ExprValue x, ExprValue y) => new ExprValue(Compare(x, y) >= 0);
+
+		/// <summary>
+		/// 累乗
+		/// </summary>
+		/// <returns>演算結果</returns>
+		/// <param name="x">左の値</param>
+		/// <param name="y">右の値</param>
+		static ExprValue Power(ExprValue x, ExprValue y) => new ExprValue(System.Math.Pow(x.AsNumber(), y.AsNumber()));
+
+		/// <summary>
+		/// 単項演算子の関数
+		/// </summary>
+		delegate ExprValue UnaryOperator(ExprValue x);
+
+		/// <summary>
+		/// 単項演算子の辞書
+		/// </summary>
+		static Dictionary<string, UnaryOperator> UnaryOperators = new Dictionary<string, UnaryOperator> {
+			{ "!", LogicalNot },
+			{ "~", BitwiseNot },
+			{ "+", UnaryPlus },
+			{ "-", Negate }
+		};
+
+		/// <summary>
+		/// 単項演算子の演算を行う。
+		/// </summary>
+		/// <returns>演算結果</returns>
+		/// <param name="x">対象の値</param>
+		/// <param name="op">演算子の文字列</param>
+		public static ExprValue EvalUnaryOperator(ExprValue x, string op)
+		{
+			return UnaryOperators[op](x);
+		}
+
+		/// <summary>
+		/// 単項プラス
+		/// </summary>
+		/// <returns>演算結果</returns>
+		/// <param name="x">対象の値</param>
+		static ExprValue UnaryPlus(ExprValue x) => new ExprValue(x.AsNumber());
+
+		/// <summary>
+		/// 単項マイナス
+		/// </summary>
+		/// <returns>演算結果</returns>
+		/// <param name="x">対象の値</param>
+		static ExprValue Negate(ExprValue x) => new ExprValue(-x.AsNumber());
+
+		/// <summary>
+		/// ビット演算のNOT
+		/// </summary>
+		/// <returns>演算結果</returns>
+		/// <param name="x">対象の値</param>
+		static ExprValue BitwiseNot(ExprValue x) => new ExprValue(~x.AsInt());
+
+		/// <summary>
+		/// 論理NOT
+		/// </summary>
+		/// <returns>演算結果</returns>
+		/// <param name="x">対象の値</param>
+		static ExprValue LogicalNot(ExprValue x) => new ExprValue(!x.AsBool());
+	}
+}
