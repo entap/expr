@@ -13,16 +13,16 @@ namespace Entap.Expr
 	/// </summary>
 	internal class Lexer
 	{
-		string _expr;
+		string _expression;
 		int _offset;
 
 		/// <summary>
 		/// <see cref="T:Entap.Expr.Lexer"/> クラスのインスタンスを初期化する。
 		/// </summary>
-		/// <param name="expr">数式の文字列</param>
-		public Lexer(string expr)
+		/// <param name="expression">数式の文字列</param>
+		public Lexer(string expression)
 		{
-			_expr = expr;
+			_expression = expression;
 			_offset = 0;
 		}
 
@@ -32,7 +32,7 @@ namespace Entap.Expr
 		/// <returns>読み込んだ文字</returns>
 		int PeekChar()
 		{
-			return _offset < _expr.Length ? _expr[_offset] : -1;
+			return _offset < _expression.Length ? _expression[_offset] : -1;
 		}
 
 		/// <summary>
@@ -42,7 +42,7 @@ namespace Entap.Expr
 		/// <param name="n">文字数</param>
 		string PeekString(int n)
 		{
-			return _expr.Substring(_offset, System.Math.Min(_expr.Length - _offset, n));
+			return _expression.Substring(_offset, System.Math.Min(_expression.Length - _offset, n));
 		}
 
 		/// <summary>
@@ -50,7 +50,7 @@ namespace Entap.Expr
 		/// </summary>
 		void NextChar(int n = 1)
 		{
-			if (_offset + n <= _expr.Length) {
+			if (_offset + n <= _expression.Length) {
 				_offset += n;
 			}
 		}
@@ -75,11 +75,11 @@ namespace Entap.Expr
 		{
 			var start = _offset;
 			var i = 0;
-			while (i < n && (start + i) < _expr.Length && predicate(_expr[start + i])) {
+			while (i < n && (start + i) < _expression.Length && predicate(_expression[start + i])) {
 				i++;
 			}
 			_offset += i;
-			return _expr.Substring(start, i);
+			return _expression.Substring(start, i);
 		}
 
 		/// <summary>
@@ -112,10 +112,10 @@ namespace Entap.Expr
 				token.Type = TokenType.Punctuator;
 				token.Value = ReadPunctuator();
 				if (token.Value == null) {
-					throw new ExprSyntaxException("Unknown char: " + (char)c, _offset);
+					throw new ExpressionSyntaxException("Unknown char: " + (char)c, _offset);
 				}
 			}
-			token.Text = _expr.Substring(token.Offset, _offset - token.Offset);
+			token.Text = _expression.Substring(token.Offset, _offset - token.Offset);
 			return token;
 		}
 
@@ -123,10 +123,10 @@ namespace Entap.Expr
 		/// 数式を字句解析する。
 		/// </summary>
 		/// <returns>トークンの配列</returns>
-		/// <param name="expr">数式の文字列</param>
-		public static TokenList ReadAll(string expr)
+		/// <param name="expression">数式の文字列</param>
+		public static TokenList ReadAll(string expression)
 		{
-			return (new Lexer(expr)).ReadAll();
+			return (new Lexer(expression)).ReadAll();
 		}
 
 		/// <summary>
@@ -195,7 +195,7 @@ namespace Entap.Expr
 				NextChar(2);
 				var hex = ReadWhile(IsHexDigit);
 				if (hex.Length == 0) {
-					throw new ExprSyntaxException("Invalid number format", _offset);
+					throw new ExpressionSyntaxException("Invalid number format", _offset);
 				}
 				return Convert.ToDouble(Convert.ToInt64(hex, 16));
 			}
@@ -212,7 +212,7 @@ namespace Entap.Expr
 				NextChar();
 				var dec = ReadWhile(IsDecDigit);
 				if (dec.Length == 0) {
-					throw new ExprSyntaxException("Invalid number format", _offset);
+					throw new ExpressionSyntaxException("Invalid number format", _offset);
 				}
 				s.Append(dec);
 				c1 = PeekChar();
@@ -230,7 +230,7 @@ namespace Entap.Expr
 				}
 				var exp = ReadWhile(IsDecDigit);
 				if (exp.Length == 0) {
-					throw new ExprSyntaxException("Invalid number format", _offset);
+					throw new ExpressionSyntaxException("Invalid number format", _offset);
 				}
 				s.Append(exp);
 			}
@@ -250,7 +250,7 @@ namespace Entap.Expr
 			while (true) {
 				var c = PeekChar();
 				if (c == -1) {
-					throw new ExprSyntaxException("Unclosed quote", _offset);
+					throw new ExpressionSyntaxException("Unclosed quote", _offset);
 				}
 				NextChar();
 				if (c == quote) {

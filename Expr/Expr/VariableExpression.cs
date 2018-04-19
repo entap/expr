@@ -4,15 +4,15 @@ namespace Entap.Expr
 	/// <summary>
 	/// 変数を持つ式
 	/// </summary>
-	internal class VarExpr : IExpr
+	internal class VariableExpression : IExpression
 	{
 		readonly string _name;
 
 		/// <summary>
-		/// <see cref="T:Entap.Expr.VarExpr"/> クラスのインスタンスを初期化する。
+		/// <see cref="T:Entap.Expr.VariableExpression"/> クラスのインスタンスを初期化する。
 		/// </summary>
 		/// <param name="name">変数名</param>
-		public VarExpr(string name)
+		public VariableExpression(string name)
 		{
 			_name = name;
 		}
@@ -22,9 +22,9 @@ namespace Entap.Expr
 		/// </summary>
 		/// <returns>評価結果</returns>
 		/// <param name="binding">変数のバインディング</param>
-		public ExprValue Eval(BindingDelegate binding)
+		public Value Evaluate(BindingDelegate binding)
 		{
-			return new ExprValue(binding(_name));
+			return new Value(binding(_name));
 		}
 	}
 }

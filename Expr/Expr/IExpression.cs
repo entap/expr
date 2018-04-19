@@ -3,12 +3,12 @@
 	/// <summary>
 	/// 式のノード
 	/// </summary>
-	internal interface IExpr
+	internal interface IExpression
 	{
 		/// <summary>
 		/// 数式ノードを評価する。
 		/// </summary>
 		/// <returns>評価結果</returns>
-		ExprValue Eval(BindingDelegate binding);
+		Value Evaluate(BindingDelegate binding);
 	}
 }

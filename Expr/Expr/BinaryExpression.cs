@@ -3,19 +3,19 @@
 	/// <summary>
 	/// 二項演算子を持つ式
 	/// </summary>
-	internal class BinaryExpr : IExpr
+	internal class BinaryExpression : IExpression
 	{
 		readonly string _op;
-		readonly IExpr _left;
-		readonly IExpr _right;
+		readonly IExpression _left;
+		readonly IExpression _right;
 
 		/// <summary>
-		/// <see cref="T:Entap.Expr.BinaryExpr"/> クラスのインスタンスを初期化する。
+		/// <see cref="T:Entap.Expr.BinaryExpression"/> クラスのインスタンスを初期化する。
 		/// </summary>
 		/// <param name="op">演算子</param>
 		/// <param name="left">左のノード</param>
 		/// <param name="right">右のノード</param>
-		public BinaryExpr(string op, IExpr left, IExpr right)
+		public BinaryExpression(string op, IExpression left, IExpression right)
 		{
 			_op = op;
 			_left = left;
@@ -27,9 +27,9 @@
 		/// </summary>
 		/// <returns>評価結果</returns>
 		/// <param name="binding">変数のバインディング</param>
-		public ExprValue Eval(BindingDelegate binding)
+		public Value Evaluate(BindingDelegate binding)
 		{
-			return ExprValue.EvalBinaryOperator(_left.Eval(binding), _right.Eval(binding), _op);
+			return Value.EvaluateBinaryOperator(_left.Evaluate(binding), _right.Evaluate(binding), _op);
 		}
 	}
 }

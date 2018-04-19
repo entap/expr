@@ -4,17 +4,17 @@ using System.Reflection;
 
 namespace Entap.Expr
 {
-	internal class FuncExpr : IExpr
+	internal class FuncExpression : IExpression
 	{
 		readonly string _func;
-		readonly List<IExpr> _args;
+		readonly List<IExpression> _args;
 
 		/// <summary>
-		/// <see cref="T:Entap.Expr.FuncExpr"/> クラスのインスタンスを初期化する。
+		/// <see cref="T:Entap.Expr.FuncExpression"/> クラスのインスタンスを初期化する。
 		/// </summary>
 		/// <param name="func">関数名</param>
 		/// <param name="args">引数のノード</param>
-		public FuncExpr(string func, List<IExpr> args)
+		public FuncExpression(string func, List<IExpression> args)
 		{
 			_func = func;
 			_args = args;
@@ -25,7 +25,7 @@ namespace Entap.Expr
 		/// </summary>
 		/// <returns>評価結果</returns>
 		/// <param name="binding">変数のバインディング</param>
-		public ExprValue Eval(BindingDelegate binding)
+		public Value Evaluate(BindingDelegate binding)
 		{
 			var func = binding(_func) as Delegate;
 			var p = func.GetMethodInfo().GetParameters();
@@ -34,9 +34,9 @@ namespace Entap.Expr
 			}
 			var args = new object[p.Length];
 			for (var i = 0; i < _args.Count; i++) {
-				args[i] = _args[i].Eval(binding).As(p[i].ParameterType);
+				args[i] = _args[i].Evaluate(binding).As(p[i].ParameterType);
 			}
-			return new ExprValue(func.DynamicInvoke(args));
+			return new Value(func.DynamicInvoke(args));
 		}
 	}
 }

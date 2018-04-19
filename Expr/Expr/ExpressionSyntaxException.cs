@@ -3,7 +3,7 @@
 namespace Entap.Expr
 {
 	[System.Serializable]
-	public class ExprSyntaxException : Exception
+	public class ExpressionSyntaxException : Exception
 	{
 		readonly int _offset;
 
@@ -13,18 +13,18 @@ namespace Entap.Expr
 		public int Offset { get => _offset; }
 
 		/// <summary>
-		/// <see cref="T:ExprSyntaxException"/> クラスのインスタンスを初期化する。
+		/// <see cref="T:ExpressionSyntaxException"/> クラスのインスタンスを初期化する。
 		/// </summary>
-		public ExprSyntaxException()
+		public ExpressionSyntaxException()
 		{
 		}
 
 		/// <summary>
-		/// <see cref="T:ExprSyntaxException"/> クラスのインスタンスを初期化する。
+		/// <see cref="T:ExpressionSyntaxException"/> クラスのインスタンスを初期化する。
 		/// </summary>
 		/// <param name="message">メッセージ</param>
 		/// <param name="message">オフセット</param>
-		public ExprSyntaxException(string message, int offset) : base(message)
+		public ExpressionSyntaxException(string message, int offset) : base(message)
 		{
 			_offset = offset;
 		}

@@ -3,20 +3,20 @@
 	/// <summary>
 	/// 単項演算子を持つ式
 	/// </summary>
-	internal class UnaryExpr : IExpr
+	internal class UnaryExpression : IExpression
 	{
 		readonly string _op;
-		readonly IExpr _expr;
+		readonly IExpression _expression;
 
 		/// <summary>
 		/// <see cref="T:Entap.Expr.UnaryExpr"/> クラスのインスタンスを初期化する。
 		/// </summary>
 		/// <param name="op">演算子</param>
-		/// <param name="expr">式</param>
-		public UnaryExpr(string op, IExpr expr)
+		/// <param name="expression">式</param>
+		public UnaryExpression(string op, IExpression expression)
 		{
 			_op = op;
-			_expr = expr;
+			_expression = expression;
 		}
 
 		/// <summary>
@@ -24,9 +24,9 @@
 		/// </summary>
 		/// <returns>評価結果</returns>
 		/// <param name="binding">変数のバインディング</param>
-		public ExprValue Eval(BindingDelegate binding)
+		public Value Evaluate(BindingDelegate binding)
 		{
-			return ExprValue.EvalUnaryOperator(_expr.Eval(binding), _op);
+			return Value.EvaluateUnaryOperator(_expression.Evaluate(binding), _op);
 		}
 	}
 }
