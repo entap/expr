@@ -70,6 +70,7 @@ Deg2Rad
 ## 標準関数
 
 abs
+
 acos
 asin
 atan
