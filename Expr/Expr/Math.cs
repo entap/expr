@@ -8,7 +8,7 @@ namespace Entap.Expr
 		/// <summary>
 		/// 定数の定義
 		/// </summary>
-		static Dictionary<string, object> Constants = new Dictionary<string, object> {
+		static readonly Dictionary<string, object> Constants = new Dictionary<string, object> {
 			// 定数値
 			{ "true", true },
 			{ "false", false },
@@ -32,7 +32,7 @@ namespace Entap.Expr
 		/// <summary>
 		/// 関数の定義
 		/// </summary>
-		static Dictionary<string, Delegate> Functions = new Dictionary<string, Delegate> {
+		static readonly Dictionary<string, Delegate> Functions = new Dictionary<string, Delegate> {
 			// 数学関数(よく使われるものだけ)
 			{ "abs", new Func<double, double>(System.Math.Abs) },
 			{ "acos", new Func<double, double>(System.Math.Acos) },
@@ -53,7 +53,7 @@ namespace Entap.Expr
 			{ "min", new Func<double, double, double>(System.Math.Min) },
 			{ "pow", new Func<double, double, double>(System.Math.Pow) },
 			{ "round", new Func<double, double>(System.Math.Round) },
-			{ "sign", new Func<double, double>(x => (double)System.Math.Sign(x)) },
+			{ "sign", new Func<double, double>(x => System.Math.Sign(x)) },
 			{ "sin", new Func<double, double>(System.Math.Sin) },
 			{ "sinh", new Func<double, double>(System.Math.Sinh) },
 			{ "sqrt", new Func<double, double>(System.Math.Sqrt) },
@@ -66,7 +66,7 @@ namespace Entap.Expr
 			{ "dist", new Func<double, double, double, double, double>((x1, y1, x2, y2) => Hypot(x1-x2, y1-y2)) },
 			{ "lerp", new Func<double, double, double, double>(Lerp) },
 			{ "norm", new Func<double, double, double, double>(Norm) },
-			{ "map", new Func<double, double, double, double, double, double>(Map) },
+			{ "map", new Func<double, double, double, double, double, double>(Map) }
 		};
 
 		/// <summary>

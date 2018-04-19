@@ -52,25 +52,25 @@ namespace Entap.Expr
 		/// <summary>
 		/// 値が真偽値か判定する。
 		/// </summary>
-		/// <returns>真偽値なら<c>true</c>、そうでないなら<c>false</c>
+		/// <returns>真偽値なら<c>true</c>、そうでないなら<c>false</c></returns>
 		public bool IsBool() => _value is bool;
 
 		/// <summary>
 		/// 値が実数か判定する。
 		/// </summary>
-		/// <returns>値が実数なら<c>true</c>、そうでないなら<c>false</c>
+		/// <returns>値が実数なら<c>true</c>、そうでないなら<c>false</c></returns>
 		public bool IsNumber() => _value is double;
 
 		/// <summary>
 		/// 値が文字列か判定する。
 		/// </summary>
-		/// <returns>値が文字列なら<c>true</c>、そうでないなら<c>false</c>
+		/// <returns>値が文字列なら<c>true</c>、そうでないなら<c>false</c></returns>
 		public bool IsString() => _value is string;
 
 		/// <summary>
 		/// 値が関数か判定する。
 		/// </summary>
-		/// <returns>値が関数なら<c>true</c>、そうでないなら<c>false</c>
+		/// <returns>値が関数なら<c>true</c>、そうでないなら<c>false</c></returns>
 		public bool IsFunc() => _value is Delegate;
 
 		/// <summary>
@@ -91,7 +91,7 @@ namespace Entap.Expr
 			if (_value is string) {
 				return ((string)_value).Length >= 1;
 			}
-			throw new NotImplementedException();
+			throw new InvalidCastException();
 		}
 
 		/// <summary>
@@ -113,7 +113,7 @@ namespace Entap.Expr
 				double d;
 				return double.TryParse((string)_value, out d) ? d : double.NaN;
 			}
-			throw new NotImplementedException();
+			throw new InvalidCastException();
 		}
 
 		/// <summary>
@@ -127,19 +127,6 @@ namespace Entap.Expr
 				return 0;
 			}
 			return Convert.ToInt32(n);
-		}
-
-		/// <summary>
-		/// 関数として取得する。
-		/// </summary>
-		/// <returns>結果</returns>
-		public Delegate AsFunc()
-		{
-			if (_value is Delegate) {
-				return (Delegate)_value;
-			} else {
-				return new Func<Value>(() => this);
-			}
 		}
 
 		/// <summary>
@@ -157,19 +144,23 @@ namespace Entap.Expr
 		{
 			if (type == typeof(int)) {
 				return AsInt();
-			} else if (type == typeof(double)) {
-				return AsNumber();
-			} else if (type == typeof(bool)) {
-				return AsBool();
-			} else if (type == typeof(string)) {
-				return AsString();
-			} else if (type == typeof(object)) {
-				return _value;
-			} else if (type == typeof(Value)) {
-				return this;
-			} else {
-				throw new InvalidCastException();
 			}
+			if (type == typeof(double)) {
+				return AsNumber();
+			}
+			if (type == typeof(bool)) {
+				return AsBool();
+			}
+			if (type == typeof(string)) {
+				return AsString();
+			}
+			if (type == typeof(object)) {
+				return _value;
+			}
+			if (type == typeof(Value)) {
+				return this;
+			}
+			throw new InvalidCastException();
 		}
 
 		/// <summary>
@@ -194,9 +185,8 @@ namespace Entap.Expr
 		{
 			if (x.IsString() && y.IsString()) {
 				return System.Math.Sign(string.Compare((string)x._value, (string)y._value));
-			} else {
-				return System.Math.Sign(x.AsNumber() - y.AsNumber());
 			}
+			return System.Math.Sign(x.AsNumber() - y.AsNumber());
 		}
 
 		/// <summary>
@@ -251,9 +241,8 @@ namespace Entap.Expr
 		{
 			if (x.IsString() || y.IsString()) {
 				return new Value(x.AsString() + y.AsString());
-			} else {
-				return new Value(x.AsNumber() + y.AsNumber());
 			}
+			return new Value(x.AsNumber() + y.AsNumber());
 		}
 
 		/// <summary>

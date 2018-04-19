@@ -200,9 +200,8 @@ namespace Entap.Expr
 				if (PeekToken().IsOperator("(")) {
 					NextToken();
 					return new FuncExpression(token.Text, ParseArguments());
-				} else {
-					return new VariableExpression((string)token.Value);
 				}
+				return new VariableExpression((string)token.Value);
 			}
 			throw new ExpressionSyntaxException("Invalid token: " + token.Text, token.Offset);
 		}
