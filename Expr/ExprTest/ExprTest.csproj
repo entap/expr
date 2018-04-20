@@ -21,4 +21,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Expr\Expr.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="BenchTest.cs" />
+  </ItemGroup>
 </Project>

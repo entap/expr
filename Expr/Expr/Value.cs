@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Entap.Expr
 {
-	internal class Value
+	internal struct Value
 	{
 		object _value;
 
@@ -28,6 +28,7 @@ namespace Entap.Expr
 		/// <param name="value">Value.</param>
 		public Value(object value = null)
 		{
+			_value = null;
 			Set(value);
 		}
 
@@ -162,6 +163,9 @@ namespace Entap.Expr
 			}
 			if (type == typeof(double)) {
 				return AsNumber();
+			}
+			if (type == typeof(float)) {
+				return (float)AsNumber();
 			}
 			if (type == typeof(bool)) {
 				return AsBool();

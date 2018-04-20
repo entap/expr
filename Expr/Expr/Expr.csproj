@@ -9,6 +9,7 @@
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <LangVersion>4</LangVersion>
+    <DebugType></DebugType>
   </PropertyGroup>
   <ItemGroup>
     <Compile Remove="Class1.cs" />
