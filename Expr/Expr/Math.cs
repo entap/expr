@@ -59,14 +59,6 @@ namespace Entap.Expr
 			{ "sqrt", new Func<double, double>(System.Math.Sqrt) },
 			{ "tan", new Func<double, double>(System.Math.Tan) },
 			{ "tanh", new Func<double, double>(System.Math.Tanh) },
-			// Processingで使われるもの
-			{ "sq", new Func<double, double>(x => x * x) },
-			{ "constrain", new Func<double, double, double, double>(Constrain) },
-			{ "mag", new Func<double, double, double>((x, y) => System.Math.Sqrt(x * x + y * y)) },
-			{ "dist", new Func<double, double, double, double, double>((x1, y1, x2, y2) => Hypot(x1-x2, y1-y2)) },
-			{ "lerp", new Func<double, double, double, double>(Lerp) },
-			{ "norm", new Func<double, double, double, double>(Norm) },
-//			{ "map", new Func<double, double, double, double, double, double>(Map) }
 		};
 
 		/// <summary>
@@ -78,56 +70,6 @@ namespace Entap.Expr
 		static double Hypot(double x, double y)
 		{
 			return System.Math.Sqrt(x * x + y * y);
-		}
-
-		/// <summary>
-		/// 値を範囲内に収める。
-		/// </summary>
-		/// <returns>結果</returns>
-		/// <param name="x">値</param>
-		/// <param name="a">最小値</param>
-		/// <param name="b">最大値</param>
-		static double Constrain(double x, double a, double b)
-		{
-			return x < a ? a : (x > b ? b : x);
-		}
-
-		/// <summary>
-		/// 値を範囲内に収める。
-		/// </summary>
-		/// <returns>結果</returns>
-		/// <param name="a">範囲の下限値</param>
-		/// <param name="b">範囲の上限値</param>
-		/// <param name="x">値</param>
-		static double Lerp(double a, double b, double x)
-		{
-			return a * (1 - x) + b * x;
-		}
-
-		/// <summary>
-		/// ある範囲の値を正規化する。
-		/// </summary>
-		/// <returns>結果</returns>
-		/// <param name="x">値</param>
-		/// <param name="a">範囲の下限値</param>
-		/// <param name="b">範囲の上限値</param>
-		static double Norm(double x, double a, double b)
-		{
-			return Map(x, a, b, 0, 1);
-		}
-
-		/// <summary>
-		/// ある範囲の値を別の範囲に写像する。
-		/// </summary>
-		/// <returns>結果</returns>
-		/// <param name="x">値</param>
-		/// <param name="a">写像元範囲の下限値</param>
-		/// <param name="b">写像元範囲の上限値</param>
-		/// <param name="c">写像先範囲の下限値</param>
-		/// <param name="d">写像先範囲の上限値</param>
-		static double Map(double x, double a, double b, double c, double d)
-		{
-			return (a == b) ? c : (x - a) * (d - c) / (b - a) + c;
 		}
 
 		/// <summary>
